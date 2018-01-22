@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
+from __future__ import print_function
+
 import argparse
 import sys
 
@@ -39,12 +41,12 @@ plotDensity = args.density
 # data loading
 df = pd.DataFrame()
 for dataPath in dataPaths:
-    print 'Loading', dataPath, '...'
+    print('Loading', dataPath, '...')
     df = pd.concat([df, pd.read_pickle(dataPath)])
 
 df.columns = ['timestamp', 'conversationId', 'conversationWithName', 'senderName', 'text', 'platform', 'language',
               'datetime']
-print 'Loaded', len(df), 'messages'
+print('Loaded', len(df), 'messages')
 
 # filtering
 if filterConversation is not None:
@@ -62,13 +64,13 @@ mf = df.groupby(['conversationWithName'], as_index=False) \
     .sort_values('timestamp', ascending=False)['conversationWithName'] \
     .head(topN).to_frame()
 
-print mf
+print(mf)
 
 merged = pd.merge(df, mf, on=['conversationWithName'], how='inner')
 merged = merged[['datetime', 'conversationWithName', 'senderName']]
 
-print "Number to render:", len(merged)
-print merged.head()
+print("Number to render:", len(merged))
+print(merged.head())
 
 # rendering
 if plotDensity:
@@ -86,4 +88,4 @@ else:
            + ylab("Number of Messages") \
            + xlab("Date")
 
-print plot
+print(plot)
